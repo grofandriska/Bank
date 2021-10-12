@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 @Data
 public class AccountService {
 
@@ -32,7 +33,6 @@ public class AccountService {
         account.setBalance(account.getBalance() - amount);
         accountRepository.save(account);
         System.out.println("Transaction was successful");
-
     }
 
     public Double addToBalance(Long id, Double amount) {
