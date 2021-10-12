@@ -1,15 +1,11 @@
 package com.grofandris.api.Bank.services;
-
 import com.grofandris.api.Bank.models.Account;
 import com.grofandris.api.Bank.repositories.AccountRepository;
 import lombok.Data;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
-
 @Service
-@Transactional
 @Data
 public class AccountService {
 
@@ -24,10 +20,11 @@ public class AccountService {
     }
 
     public Double getBalance(Long id) {
-        return accountRepository.findById(id).get().getBalance();
+        Account account = accountRepository.findById(id).get();
+        return account.getBalance();
     }
 
-    public Double withdrawFromBalance(Long id, Double amount) {
+    public void withdrawFromBalance(Long id, Double amount) {
         Account account = accountRepository.findById(id).get();
         if (account.getBalance() < amount) {
             throw new RuntimeException("Account haven't got enough money for this transaction");
@@ -35,7 +32,7 @@ public class AccountService {
         account.setBalance(account.getBalance() - amount);
         accountRepository.save(account);
         System.out.println("Transaction was successful");
-        return accountRepository.findById(id).get().getBalance();
+
     }
 
     public Double addToBalance(Long id, Double amount) {

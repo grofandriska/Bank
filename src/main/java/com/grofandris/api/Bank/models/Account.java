@@ -1,6 +1,5 @@
 package com.grofandris.api.Bank.models;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,12 +16,7 @@ import java.util.UUID;
 public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private final UUID uuid = UUID.randomUUID();
 
     @ManyToOne(fetch = FetchType.EAGER)
     private User user;
