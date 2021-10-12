@@ -4,6 +4,8 @@ import com.grofandris.api.Bank.models.Account;
 import com.grofandris.api.Bank.services.AccountService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/bank/account")
@@ -20,13 +22,13 @@ public class AccountController {
         return accountService.saveAccount(account);
     }
 
-    @PostMapping("/withdraw/{id}/amount/{amount}")
-    public void withdraw(@PathVariable("id") Long id,
+    @GetMapping("/withdraw/{id}/amount/{amount}")
+    public Double withdraw(@PathVariable("id") Long id,
                            @PathVariable("amount") Double amount) {
-       accountService.withdrawFromBalance(id,amount);
+        return accountService.withdrawFromBalance(id, amount);
     }
 
-    @PostMapping("/deposit/{id}/{amount}")
+    @GetMapping("/deposit/{id}/{amount}")
     public Double deposit(@PathVariable("id") Long id,
                           @PathVariable("amount") Double amount) {
         return accountService.addToBalance(id, amount);
@@ -37,4 +39,8 @@ public class AccountController {
         return accountService.getBalance(id);
     }
 
+    @GetMapping("/transfer/{sender_id}/{receiver_id}/{amount}")
+    public List<Double> transfer(@PathVariable("sender_id") Long sender_id, @PathVariable("receiver_id") Long receiver_id, @PathVariable Double amount) {
+        return accountService.transferMoney(sender_id, receiver_id, amount);
+    }
 }
