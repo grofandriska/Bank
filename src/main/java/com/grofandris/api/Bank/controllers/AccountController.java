@@ -2,6 +2,7 @@ package com.grofandris.api.Bank.controllers;
 
 import com.grofandris.api.Bank.models.Account;
 import com.grofandris.api.Bank.services.AccountService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.List;
 @RequestMapping("/bank/account")
 public class AccountController {
 
+    @Autowired
     private AccountService accountService;
 
     public AccountController(AccountService accountService) {
