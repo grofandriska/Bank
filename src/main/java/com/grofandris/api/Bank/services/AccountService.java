@@ -25,7 +25,7 @@ public class AccountService {
         return accountRepository.save(account);
     }
 
-    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
+    @Transactional(readOnly = true, isolation = Isolation.READ_COMMITTED)
     public Double getBalance(Long id) {
         Account account = accountRepository.findById(id).get();
         return account.getBalance();
@@ -52,7 +52,7 @@ public class AccountService {
         return accountRepository.findById(id).get().getBalance();
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.NESTED)
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
     public List<Double> transferMoney(Long sender_id, Long receiver_id, Double amount) {
         Account sender = accountRepository.findById(sender_id).get();
         Account receiver = accountRepository.findById(receiver_id).get();
