@@ -20,8 +20,12 @@ public class AccountService {
         this.accountRepository = accountRepository;
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ)
+    @Transactional(isolation = Isolation.REPEATABLE_READ, rollbackFor = RuntimeException.class)
     public Account saveAccount(Account account) {
+        List<Account> list = accountRepository.findAll();
+        if (list.contains(account)) {
+            throw new RuntimeException("Account already exists");
+        }
         return accountRepository.save(account);
     }
 
@@ -31,7 +35,7 @@ public class AccountService {
         return account.getBalance();
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED,rollbackFor = RuntimeException.class)
     public Double withdrawFromBalance(Long id, Double amount) {
         Account account = accountRepository.findById(id).get();
         if (account.getBalance() < amount) {
@@ -52,7 +56,7 @@ public class AccountService {
         return accountRepository.findById(id).get().getBalance();
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED,rollbackFor = RuntimeException.class)
     public List<Double> transferMoney(Long sender_id, Long receiver_id, Double amount) {
         Account sender = accountRepository.findById(sender_id).get();
         Account receiver = accountRepository.findById(receiver_id).get();
@@ -66,5 +70,4 @@ public class AccountService {
         System.out.println("Transaction was successful");
         return List.of(senderUpdate.getBalance(), receiverUpdate.getBalance());
     }
-
 }
