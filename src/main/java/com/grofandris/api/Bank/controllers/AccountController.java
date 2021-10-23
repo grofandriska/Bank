@@ -2,7 +2,6 @@ package com.grofandris.api.Bank.controllers;
 
 import com.grofandris.api.Bank.models.Account;
 import com.grofandris.api.Bank.services.AccountService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.List;
 @RequestMapping("/bank/account")
 public class AccountController {
 
-    @Autowired
     private AccountService accountService;
 
     public AccountController(AccountService accountService) {
@@ -36,13 +34,15 @@ public class AccountController {
         return accountService.addToBalance(id, amount);
     }
 
-    @GetMapping("getbalance/{id}")
+    @GetMapping("/balance/{id}")
     public Double getBalance(@PathVariable Long id) {
         return accountService.getBalance(id);
     }
 
     @GetMapping("/transfer/{sender_id}/{receiver_id}/{amount}")
-    public List<Double> transfer(@PathVariable("sender_id") Long sender_id, @PathVariable("receiver_id") Long receiver_id, @PathVariable Double amount) {
+    public List<Double> transfer(@PathVariable("sender_id") Long sender_id,
+                                 @PathVariable("receiver_id") Long receiver_id,
+                                 @PathVariable Double amount) {
         return accountService.transferMoney(sender_id, receiver_id, amount);
     }
 }

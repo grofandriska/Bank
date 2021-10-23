@@ -35,14 +35,17 @@ public class AccountService {
         return account.getBalance();
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED,rollbackFor = RuntimeException.class)
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class)
     public Double withdrawFromBalance(Long id, Double amount) {
         Account account = accountRepository.findById(id).get();
+
         if (account.getBalance() < amount) {
             throw new RuntimeException("Account haven't got enough money for this transaction");
         }
+
         account.setBalance(account.getBalance() - amount);
         Account update = accountRepository.save(account);
+
         System.out.println("Transaction was successful");
         return update.getBalance();
     }
@@ -50,24 +53,31 @@ public class AccountService {
     @Transactional(isolation = Isolation.READ_COMMITTED, propagation = Propagation.REQUIRED)
     public Double addToBalance(Long id, Double amount) {
         Account account = accountRepository.findById(id).get();
+
         account.setBalance(account.getBalance() + amount);
         accountRepository.save(account);
+
         System.out.println("Transaction was successful");
         return accountRepository.findById(id).get().getBalance();
     }
 
-    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED,rollbackFor = RuntimeException.class)
+    @Transactional(isolation = Isolation.SERIALIZABLE, propagation = Propagation.REQUIRED, rollbackFor = RuntimeException.class)
     public List<Double> transferMoney(Long sender_id, Long receiver_id, Double amount) {
         Account sender = accountRepository.findById(sender_id).get();
         Account receiver = accountRepository.findById(receiver_id).get();
+
         if (sender.getBalance() < amount) {
             throw new RuntimeException("Account haven't got enough money for this transaction");
         }
+
         sender.setBalance(sender.getBalance() - amount);
         Account senderUpdate = accountRepository.save(sender);
+
         receiver.setBalance(receiver.getBalance() + amount);
         Account receiverUpdate = accountRepository.save(receiver);
+
         System.out.println("Transaction was successful");
         return List.of(senderUpdate.getBalance(), receiverUpdate.getBalance());
     }
+
 }
