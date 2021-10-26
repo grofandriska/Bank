@@ -80,4 +80,8 @@ public class AccountService {
         return List.of(senderUpdate.getBalance(), receiverUpdate.getBalance());
     }
 
+    public Account findById(Long id){
+        return accountRepository.findById(id).get();
+    }
+
 }

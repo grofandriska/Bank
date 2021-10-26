@@ -45,4 +45,9 @@ public class AccountController {
                                  @PathVariable Double amount) {
         return accountService.transferMoney(sender_id, receiver_id, amount);
     }
+
+    @GetMapping("/getById/{id}")
+    public Account getAccount(@PathVariable("id") Long id){
+        return accountService.findById(id);
+    }
 }
